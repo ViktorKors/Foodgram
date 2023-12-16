@@ -4,20 +4,14 @@ import re
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.files.base import ContentFile
-from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
-from rest_framework.fields import CurrentUserDefault
 
-from recipes.models import (
-    Favorite,
-    Ingredient,
-    Recipe,
-    RecipeIngredient,
-    ShoppingCart,
-    Tag,
-)
-from users.models import Follow
 from core import constants
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
+from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
+from rest_framework.validators import UniqueValidator
+from users.models import Follow
 
 User = get_user_model()
 

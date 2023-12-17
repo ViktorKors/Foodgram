@@ -104,6 +104,7 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for tags."""
     queryset = Tag.objects.all().order_by('-id')
     serializer_class = TagSerializer
+    permission_classes = (AllowAny,)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -222,3 +223,4 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filterset_class = IngredientFilter
+    permission_classes = (AllowAny,)

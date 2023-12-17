@@ -100,17 +100,10 @@ class UserMe(APIView):
         return self.get(request)
 
 
-class TagsViewSet(viewsets.ModelViewSet):
-    """Viewset for Tags."""
-
-    queryset = Tag.objects.all()
+class TagsViewSet(viewsets.ReadOnlyModelViewSet):
+    """Viewset for tags."""
+    queryset = Tag.objects.all().order_by('-id')
     serializer_class = TagSerializer
-    lookup_field = "id"
-    permission_classes = (IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
-    http_method_names = [
-        "get",
-    ]
-    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -224,16 +217,10 @@ class FollowListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         ).prefetch_related("author__recipe")
 
 
-class IngredientViewSet(viewsets.ModelViewSet):
-    """Ingredients View Viewset."""
-
+class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
+    """Viewset for Ingredients."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (AllowAny,)
-    pagination_class = None
     filterset_class = IngredientFilter
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ("name",)
-    http_method_names = [
-        "get",
-    ]
+
+

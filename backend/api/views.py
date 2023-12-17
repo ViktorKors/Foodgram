@@ -224,7 +224,7 @@ class FollowListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         ).prefetch_related("author__recipe")
 
 
-class IngredientViewSet(viewsets.ModelViewSet): #пробовал через ReadOnlyModekViewset. Не отображаются ни теги ни ингредиенты
+class IngredientViewSet(viewsets.ModelViewSet):
     """Ingredients View Viewset."""
 
     queryset = Ingredient.objects.all()

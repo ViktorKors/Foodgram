@@ -100,11 +100,17 @@ class UserMe(APIView):
         return self.get(request)
 
 
-class TagsViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for tags."""
-    queryset = Tag.objects.all().order_by('-id')
+class TagsViewSet(viewsets.ModelViewSet):
+    """Viewset for Tags."""
+
+    queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (AllowAny,)
+    lookup_field = "id"
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
+    http_method_names = [
+        "get",
+    ]
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -218,9 +224,16 @@ class FollowListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         ).prefetch_related("author__recipe")
 
 
-class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for Ingredients."""
+class IngredientViewSet(viewsets.ModelViewSet): #пробовал через ReadOnlyModekViewset. Не отображаются ни теги ни ингредиенты
+    """Ingredients View Viewset."""
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filterset_class = IngredientFilter
     permission_classes = (AllowAny,)
+    pagination_class = None
+    filterset_class = IngredientFilter
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("name",)
+    http_method_names = [
+        "get",
+    ]

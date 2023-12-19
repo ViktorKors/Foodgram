@@ -21,24 +21,12 @@ from .serializers import (FavoriteSerializer, FollowSerializer,
 User = get_user_model()
 
 
-class UsersViewSet(
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet,
-):
+class UsersViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
     """ViewSet for viewing and editing user data."""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
-    http_method_names = [
-        "get",
-        "post",
-    ]
-
 
 class BaseViewset(viewsets.ModelViewSet):
     """Basic model for Subscriptions, Favorites, Shopping List."""
@@ -116,7 +104,6 @@ class TagsViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     """Viewset for recipes."""
 
-    queryset = Recipe.objects.all().order_by("-pub_date")
     serializer_class = RecipeSerializer
     permission_classes = (
         IsAuthenticatedOrReadOnly,
@@ -124,6 +111,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Recipe.objects.prefetch_related(
+            'tags',
+            'ingredients',
+        ).select_related('author')
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous:

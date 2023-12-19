@@ -1,13 +1,12 @@
 import json
-import os
 from io import open
 
 from django.core.management.base import BaseCommand
 
 from recipes.models import Ingredient as Ingrt
 
+DATA_PATH = "data/"
 
-DATA_PATH = 'data/'
 
 class Command(BaseCommand):
     """Import of ingredients."""
@@ -26,10 +25,11 @@ class Command(BaseCommand):
                         name=name, measurement_unit=mu
                     )
                     self.stdout.write(
-                        self.style.SUCCESS(f"Object imported: {ingredient},"))
+                        self.style.SUCCESS(f"Object imported: {ingredient},")
+                    )
 
                 except SystemError:
-                    self.stdout.write("Import error")
+                    self.stdout.write(self.style.ERROR("Import error"))
 
     def handle(self, *args, **options):
         self.ingredient_import_json()

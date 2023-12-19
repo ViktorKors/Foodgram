@@ -165,7 +165,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-class FavoriteViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
+class FavoriteViewSet(
+    BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin
+):
     """Add to Favorites viewset."""
 
     queryset = Favorite.objects.all()
@@ -176,7 +178,9 @@ class FavoriteViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelM
     lookup_field = "id"
 
 
-class ShoppingCartViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
+class ShoppingCartViewSet(
+    BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin
+):
     """Viewset for adding to the Shopping List."""
 
     queryset = ShoppingCart.objects.all()
@@ -186,7 +190,9 @@ class ShoppingCartViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyMo
     title_model = Recipe
 
 
-class FollowViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
+class FollowViewSet(
+    BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin
+):
     """Viewset for adding to Subscriptions."""
 
     serializer_class = FollowSerializer

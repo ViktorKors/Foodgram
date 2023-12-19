@@ -7,29 +7,29 @@ from django.core.management.base import BaseCommand
 from recipes.models import Ingredient as Ingrt
 
 
-def ingredient_import_json():
-    """Importing ingredient objects from a json file."""
-    os.chdir("data")
-    full_path = os.getcwd()
-    with open(full_path + r"/ingredients.json", encoding="utf-8") as f:
-        data = json.load(f)
-        for object in data:
-            try:
-                name = object["name"]
-                mu = object["measurement_unit"]
-                ingredient = Ingrt.objects.get_or_create(
-                    name=name, measurement_unit=mu
-                )
-                print(f"Object imported: {ingredient},")
-
-            except SystemError:
-                print("Import error")
-
+DATA_PATH = 'data/'
 
 class Command(BaseCommand):
     """Import of ingredients."""
 
     help = "Command to import ingredients"
 
+    def ingredient_import_json(self):
+        """Importing ingredient objects from a json file."""
+        with open(DATA_PATH + r"/ingredients.json", encoding="utf-8") as f:
+            data = json.load(f)
+            for object in data:
+                try:
+                    name = object["name"]
+                    mu = object["measurement_unit"]
+                    ingredient = Ingrt.objects.get_or_create(
+                        name=name, measurement_unit=mu
+                    )
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Object imported: {ingredient},"))
+
+                except SystemError:
+                    self.stdout.write("Import error")
+
     def handle(self, *args, **options):
-        ingredient_import_json()
+        self.ingredient_import_json()

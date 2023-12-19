@@ -1,22 +1,33 @@
 from django.contrib.auth import get_user_model
+from django.db.models import BooleanField, Exists, OuterRef, Value
 from django.shortcuts import get_object_or_404
 
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Follow
 
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthorOrReadOnly
-from .serializers import (FavoriteSerializer, FollowSerializer,
-                          IngredientSerializer, RecipeCreateSerializer,
-                          RecipeSerializer, ShoppingCartSerializer,
-                          TagSerializer, UserMeSerializer, UserSerializer)
+from .serializers import (
+    FavoriteSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeCreateSerializer,
+    RecipeSerializer,
+    ShoppingCartSerializer,
+    TagSerializer,
+    UserMeSerializer,
+    UserSerializer,
+)
 
 User = get_user_model()
 
@@ -27,6 +38,7 @@ class UsersViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+
 
 class BaseViewset(viewsets.ModelViewSet):
     """Basic model for Subscriptions, Favorites, Shopping List."""
@@ -111,12 +123,32 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
+
     def get_queryset(self):
         user = self.request.user
         queryset = Recipe.objects.prefetch_related(
-            'tags',
-            'ingredients',
-        ).select_related('author')
+            "tags",
+            "ingredients",
+        ).select_related("author")
+
+        if user.is_authenticated:
+            return queryset.annotate(
+                favorite_field=Exists(
+                    Favorite.objects.filter(
+                        user=user, recipe__id=OuterRef("id")
+                    )
+                ),
+                shoppingcart_field=Exists(
+                    ShoppingCart.objects.filter(
+                        user=user, recipe__id=OuterRef("id")
+                    )
+                ),
+            ).order_by("-id")
+
+        return queryset.annotate(
+            favorite_field=Value(False, output_field=BooleanField()),
+            shoppingcart_field=Value(False, output_field=BooleanField()),
+        ).order_by("-id")
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous:

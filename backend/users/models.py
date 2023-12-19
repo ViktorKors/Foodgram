@@ -24,6 +24,8 @@ class CustomUser(AbstractUser):
         max_length=constants.MAX_USER_LEN,
         blank=False,
     )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password', 'first_name', 'last_name']
 
     class Meta:
         verbose_name = _("User")

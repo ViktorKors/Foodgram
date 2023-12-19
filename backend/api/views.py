@@ -100,16 +100,13 @@ class UserMe(APIView):
         return self.get(request)
 
 
-class TagsViewSet(viewsets.ModelViewSet):
+class TagsViewSet(viewsets.ModelViewSet, mixins.ListModelMixin):
     """Viewset for Tags."""
 
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     lookup_field = "id"
     permission_classes = (IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
-    http_method_names = [
-        "get",
-    ]
     pagination_class = None
 
 
@@ -148,7 +145,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return queryset.annotate(
             favorite_field=Value(False, output_field=BooleanField()),
             shoppingcart_field=Value(False, output_field=BooleanField()),
-        ).order_by("-id")
+        ).order_by("-pub_date")
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous:
@@ -168,7 +165,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-class FavoriteViewSet(BaseViewset):
+class FavoriteViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
     """Add to Favorites viewset."""
 
     queryset = Favorite.objects.all()
@@ -176,36 +173,24 @@ class FavoriteViewSet(BaseViewset):
     model = Favorite
     title_model = Recipe
     permission_classes = (IsAuthenticated,)
-    http_method_names = [
-        "post",
-        "delete",
-    ]
     lookup_field = "id"
 
 
-class ShoppingCartViewSet(BaseViewset):
+class ShoppingCartViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
     """Viewset for adding to the Shopping List."""
 
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
     permission_classes = (IsAuthenticated,)
-    http_method_names = [
-        "post",
-        "delete",
-    ]
     model = ShoppingCart
     title_model = Recipe
 
 
-class FollowViewSet(BaseViewset):
+class FollowViewSet(BaseViewset, mixins.CreateModelMixin, mixins.DestroyModelMixin):
     """Viewset for adding to Subscriptions."""
 
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
-    http_method_names = [
-        "post",
-        "delete",
-    ]
     model = Follow
     title_model = User
 
@@ -249,7 +234,7 @@ class FollowListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         ).prefetch_related("author__recipe")
 
 
-class IngredientViewSet(viewsets.ModelViewSet):
+class IngredientViewSet(viewsets.ModelViewSet, mixins.ListModelMixin):
     """Ingredients View Viewset."""
 
     queryset = Ingredient.objects.all()
@@ -259,6 +244,3 @@ class IngredientViewSet(viewsets.ModelViewSet):
     filterset_class = IngredientFilter
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("name",)
-    http_method_names = [
-        "get",
-    ]

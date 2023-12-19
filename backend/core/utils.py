@@ -7,7 +7,7 @@ from recipes.models import RecipeIngredient, ShoppingCart
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from  django.db.models import F
+from django.db.models import F
 
 
 class DownloadViewSet(APIView):

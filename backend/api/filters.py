@@ -32,16 +32,6 @@ class RecipeFilter(django_filters.FilterSet):
             "author",
         )
 
-    # def filter_is_in_shopping_cart(self, queryset, name, value):
-    #     if self.request.user.is_anonymous:
-    #         return queryset
-    #     return queryset.filter(shoppingcart__user=self.request.user)
-    #
-    # def filter_is_favorited(self, queryset, name, value):
-    #     if self.request.user.is_anonymous:
-    #         return queryset
-    #     return queryset.filter(favorite__user=self.request.user)
-
 
 class IngredientFilter(django_filters.FilterSet):
     """To filter by Ingredients."""

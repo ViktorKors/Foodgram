@@ -232,8 +232,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField(read_only=True)
+    is_in_shopping_cart = serializers.SerializerMethodField(read_only=True)
     author = UserSerializer()
 
     class Meta:

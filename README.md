@@ -4,11 +4,11 @@
 Фудграм - соцсеть для публикации вкусных рецептов.
 
 ## Технологии:
-- ![Python version](https://img.shields.io/pypi/pyversions/django)
-- ![Django version](https://img.shields.io/pypi/v/django?label=django)
-- ![DRF version](https://img.shields.io/pypi/v/djangorestframework?label=djangorestframework)
-- ![Docker](https://img.shields.io/badge/using-Docker-green)
-- ![Nginx](https://img.shields.io/badge/using-nginx-green)
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/-Django-092E20?style=flat&logo=django&logoColor=white)
+![Django REST framework](https://img.shields.io/badge/-Django%20REST%20framework-ff9900?style=flat&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)
 
 
 ### Процесс установки:

@@ -1,7 +1,7 @@
 [![Main Kittygram workflow](https://github.com/ViktorKors/kittygram_final/actions/workflows/main.yml/badge.svg)](https://github.com/ViktorKors/kittygram_final/actions/workflows/main.yml)
 
-# Краткое 
-Фудграм - соцсеть для публикации вкусных рецептов.
+# Описание проекта
+Foodgram - это онлайн-сервис, на котором пользователи могут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
 
 ## Технологии:
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white)
